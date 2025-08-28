@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="text-3xl gap-5 font-bold bg-blue-900 text-white py-5 px-8 shadow-blue-950 shadow-xs sticky top-0"
+    class="text-3xl gap-5 font-bold bg-indigo-950 text-white py-5 px-8 sticky top-0"
   >
     <RouterLink to="/">Home</RouterLink>
   </nav>
