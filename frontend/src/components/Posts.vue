@@ -9,8 +9,15 @@
         Create new post
       </button>
     </div>
-    <div class="grid gap-6 py-6">
+    <div class="grid gap-6 py-6" v-if="posts.length">
       <Post v-for="post in posts" :key="post.id" :post="post" />
+    </div>
+
+    <div
+      v-else
+      class="py-6 text-center text-2xl font-medium uppercase min-h-48 flex items-center justify-center"
+    >
+      Create your first post
     </div>
   </div>
 </template>
@@ -34,7 +41,6 @@ const router = useRouter();
 const posts = ref<Post[]>([]);
 
 function createNewPost() {
-  console.log(router);
   router.push('/new-post');
 }
 
