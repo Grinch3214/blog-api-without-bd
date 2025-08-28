@@ -18,7 +18,7 @@ function createPost(req, res) {
     title,
     content,
     author,
-    date,
+    date: new Date(),
   };
 
   posts.push(newPost);
