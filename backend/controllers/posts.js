@@ -5,9 +5,9 @@ function getPosts(req, res) {
 }
 
 function createPost(req, res) {
-  const { title, content, author, date } = req.body;
+  const { title, content, author } = req.body;
 
-  if (!title || !content || !author || !date) {
+  if (!title || !content || !author) {
     return res.status(400).json({
       message: 'Missing required fields: date, title, content or author',
     });
@@ -21,7 +21,7 @@ function createPost(req, res) {
     date: new Date(),
   };
 
-  posts.push(newPost);
+  posts.unshift(newPost);
 
   res.status(201).json(newPost);
 }
