@@ -38,7 +38,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 
 const {
   title = 'Post',
@@ -52,17 +51,11 @@ const {
 
 const emit = defineEmits(['form-data']);
 
-const router = useRouter();
-
 const formData = ref({
   title: '',
   content: '',
   author: '',
 });
-
-function homePage() {
-  router.push('/');
-}
 
 function clearFormData() {
   formData.value = {
@@ -84,7 +77,6 @@ function formDataHandler() {
   emit('form-data', formData.value);
 
   clearFormData();
-  homePage();
 }
 </script>
 

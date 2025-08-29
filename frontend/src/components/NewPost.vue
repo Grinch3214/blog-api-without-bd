@@ -8,8 +8,32 @@
 
 <script setup lasng="ts">
 import FormPost from './FormPost.vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
 
-function formData(data) {
+const router = useRouter();
+
+function homePage() {
+  router.push('/');
+}
+
+async function formData(data) {
   console.log(data);
+
+  const res = await createNewPost(data);
+
+  if (res) {
+    homePage();
+  }
+}
+
+async function createNewPost(body) {
+  const url = 'http://127.0.0.1:5000/posts';
+  try {
+    const response = await axios.post(url, body);
+    return response;
+  } catch (err) {
+    console.error(err);
+  }
 }
 </script>
