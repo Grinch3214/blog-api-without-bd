@@ -18,8 +18,6 @@ function homePage() {
 }
 
 async function formData(data) {
-  console.log(data);
-
   const res = await createNewPost(data);
 
   if (res) {
