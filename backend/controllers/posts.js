@@ -26,4 +26,29 @@ function createPost(req, res) {
   res.status(201).json(newPost);
 }
 
-export { getPosts, createPost };
+function deletePost(req, res) {
+  const { id } = req.params;
+  const postId = Number(id);
+
+  if (isNaN(postId) || postId <= 0) {
+    return res.status(400).json({
+      message: 'Invalid post ID',
+    });
+  }
+
+  const postIndex = posts.findIndex((post) => post.id === postId);
+
+  if (postIndex === -1) {
+    return res.status(404).json({
+      message: `Post with ID ${postId} not found`,
+    });
+  }
+  const deletedPost = posts.splice(postIndex, 1)[0];
+
+  res.status(200).json({
+    message: `Post with ID ${postId} deleted successfully`,
+    deletedPost,
+  });
+}
+
+export { getPosts, createPost, deletePost };
