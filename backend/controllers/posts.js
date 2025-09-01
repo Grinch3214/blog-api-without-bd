@@ -6,6 +6,7 @@ function getPosts(req, res) {
 
 function createPost(req, res) {
   const { title, content, author } = req.body;
+  const lastId = 3;
 
   if (!title || !content || !author) {
     return res.status(400).json({
@@ -14,7 +15,7 @@ function createPost(req, res) {
   }
 
   const newPost = {
-    id: posts.length + 1,
+    id: lastId + 1,
     title,
     content,
     author,
