@@ -10,7 +10,12 @@
       </button>
     </div>
     <div class="grid gap-6 py-6" v-if="posts.length">
-      <Post v-for="post in posts" :key="post.id" :post="post" />
+      <Post
+        v-for="post in posts"
+        :key="post.id"
+        :post="post"
+        @delete="deletePost"
+      />
     </div>
 
     <div
@@ -19,6 +24,12 @@
     >
       Create your first post
     </div>
+
+    <NativeDialog
+      v-model:isOpen="isModalOpen"
+      title="Do you want delete this post?"
+      @confirm=""
+    />
   </div>
 </template>
 
@@ -28,6 +39,7 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import Post from './Post.vue';
 import { useRouter } from 'vue-router';
+import NativeDialog from './NativeDialog.vue';
 
 interface Post {
   id: number;
@@ -39,6 +51,7 @@ interface Post {
 const router = useRouter();
 
 const posts = ref<Post[]>([]);
+const isModalOpen = ref<boolean>(false);
 
 function createNewPost() {
   router.push('/new-post');
@@ -52,6 +65,12 @@ async function getData() {
   } catch (err) {
     console.error(err);
   }
+}
+
+function deletePost(id) {
+  isModalOpen.value = true;
+
+  console.log(id);
 }
 
 onMounted(async () => {

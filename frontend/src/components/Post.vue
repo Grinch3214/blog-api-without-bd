@@ -15,6 +15,7 @@
       </button>
       <button
         class="px-5 py-1.5 bg-red-700 text-white rounded-md cursor-pointer hover:bg-red-700/80 transition-colors"
+        @click="deletePost(post.id)"
       >
         Delete
       </button>
@@ -35,6 +36,8 @@ const props = defineProps<{
   post: Post;
 }>();
 
+const emit = defineEmits(['delete']);
+
 function formatDate(isoDateString) {
   const date = new Date(isoDateString);
 
@@ -43,5 +46,9 @@ function formatDate(isoDateString) {
   const year = date.getFullYear();
 
   return `${day}.${month}.${year}`;
+}
+
+function deletePost(id) {
+  emit('delete', id);
 }
 </script>
