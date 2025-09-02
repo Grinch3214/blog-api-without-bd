@@ -14,7 +14,7 @@
         v-for="post in posts"
         :key="post.id"
         :post="post"
-        @delete="deletePost"
+        @delete="openModal"
       />
     </div>
 
@@ -28,7 +28,7 @@
     <NativeDialog
       v-model:isOpen="isModalOpen"
       title="Do you want delete this post?"
-      @confirm=""
+      @confirm="deletePostId"
     />
   </div>
 </template>
@@ -52,6 +52,7 @@ const router = useRouter();
 
 const posts = ref<Post[]>([]);
 const isModalOpen = ref<boolean>(false);
+const currentPostId = ref<number | null>(null);
 
 function createNewPost() {
   router.push('/new-post');
@@ -67,10 +68,25 @@ async function getData() {
   }
 }
 
-function deletePost(id) {
-  isModalOpen.value = true;
+async function deletePostId() {
+  const url = 'http://127.0.0.1:5000/posts';
+  try {
+    const response = await axios.delete(`${url}/${currentPostId.value}`);
 
-  console.log(id);
+    if (response.data) {
+      const deletedId = response.data.deletedPost.id;
+      posts.value = posts.value.filter((post) => post.id !== deletedId);
+      currentPostId.value = null;
+      isModalOpen.value = false;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function openModal(id) {
+  isModalOpen.value = true;
+  currentPostId.value = id;
 }
 
 onMounted(async () => {
