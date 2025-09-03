@@ -4,6 +4,18 @@ function getPosts(req, res) {
   res.json(posts);
 }
 
+function updatePost(req, res) {
+  const post = posts.find((p) => p.id === parseInt(req.params.id));
+
+  if (!post) return res.status(404).json({ message: 'Post not found' });
+
+  if (req.body.title) post.title = req.body.title;
+  if (req.body.content) post.content = req.body.content;
+  if (req.body.author) post.author = req.body.author;
+
+  res.json(post);
+}
+
 function createPost(req, res) {
   const { title, content, author } = req.body;
   const lastId = 3;
@@ -52,4 +64,4 @@ function deletePost(req, res) {
   });
 }
 
-export { getPosts, createPost, deletePost };
+export { getPosts, createPost, deletePost, updatePost };
