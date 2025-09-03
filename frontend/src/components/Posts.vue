@@ -15,6 +15,7 @@
         :key="post.id"
         :post="post"
         @delete="openModal"
+        @edit="editPost"
       />
     </div>
 
@@ -56,6 +57,10 @@ const currentPostId = ref<number | null>(null);
 
 function createNewPost() {
   router.push('/new-post');
+}
+
+function editPost(id) {
+  router.push({ name: 'edit-post', params: { id } });
 }
 
 async function getData() {

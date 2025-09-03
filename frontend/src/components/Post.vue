@@ -10,6 +10,7 @@
     <div class="flex gap-2">
       <button
         class="px-8 py-1.5 bg-indigo-950 text-white rounded-md cursor-pointer hover:bg-indigo-950/80 transition-colors"
+        @click="editPost(post.id)"
       >
         Edit
       </button>
@@ -36,7 +37,7 @@ const props = defineProps<{
   post: Post;
 }>();
 
-const emit = defineEmits(['delete']);
+const emit = defineEmits(['delete', 'edit']);
 
 function formatDate(isoDateString) {
   const date = new Date(isoDateString);
@@ -50,5 +51,9 @@ function formatDate(isoDateString) {
 
 function deletePost(id) {
   emit('delete', id);
+}
+
+function editPost(id) {
+  emit('edit', id);
 }
 </script>
