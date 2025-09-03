@@ -7,7 +7,7 @@
 </template>
 
 <script setup lasng="ts">
-import FormPost from './FormPost.vue';
+import FormPost from '@/components/FormPost.vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
