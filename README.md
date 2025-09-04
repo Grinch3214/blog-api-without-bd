@@ -16,18 +16,19 @@ A simple CRUD application for managing blog posts using **Node.js** (Express) fo
 ---
 
 ## 📁 Project Structure
-
+```plaintext
 blog-app/
-├── backend/ # Backend server (Express)
-│ ├── app.js # Main server file
-│ ├── controllers/ # API controllers
-│ ├── routes/ # API routes
-│ └── mockData.json # Mock data (posts)
+├── backend/              # Backend server (Express)
+│   ├── app.js            # Main server file
+│   ├── controllers/      # API controllers
+│   ├── routes/           # API routes
+│   └── mockData.json     # Mock data (posts)
 │
-└── frontend/ # Frontend (Vue 3)
-├── src/ # Vue source code
-├── index.html # Main HTML
-└── vite.config.js # Vite configuration
+└── frontend/             # Frontend (Vue 3)
+    ├── src/              # Vue source code
+    ├── index.html        # Main HTML
+    └── vite.config.js    # Vite configuration
+```
 
 ---
 
