@@ -37,14 +37,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { watch, ref } from 'vue';
 
 const {
   title = 'Post',
   buttonName = 'Action',
   postData,
 } = defineProps<{
-  postData?: { title: string; content: string; author: string };
+  postData?: {
+    id?: number | string;
+    title: string;
+    content: string;
+    author: string;
+    date?: string;
+  };
   title?: string;
   buttonName?: string;
 }>();
@@ -78,6 +84,18 @@ function formDataHandler() {
 
   clearFormData();
 }
+
+watch(
+  () => postData,
+  (newData) => {
+    if (newData && newData.id) {
+      formData.value.title = newData.title;
+      formData.value.content = newData.content;
+      formData.value.author = newData.author;
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <style scoped>

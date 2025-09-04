@@ -4,6 +4,13 @@ function getPosts(req, res) {
   res.json(posts);
 }
 
+function getSinglePost(req, res) {
+  const post = posts.find((p) => p.id === parseInt(req.params.id));
+  if (!post) return res.status(404).json({ message: 'Post not found' });
+
+  res.json(post);
+}
+
 function updatePost(req, res) {
   const post = posts.find((p) => p.id === parseInt(req.params.id));
 
@@ -64,4 +71,4 @@ function deletePost(req, res) {
   });
 }
 
-export { getPosts, createPost, deletePost, updatePost };
+export { getPosts, createPost, deletePost, updatePost, getSinglePost };
