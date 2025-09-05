@@ -1,7 +1,6 @@
 <template>
-  <form
+  <div
     class="flex flex-col my-4 gap-3 shadow-2xl rounded-md bg-gray-100 px-5 py-6 max-w-3xl mx-auto text-indigo-950"
-    @click.prevent
   >
     <h2 class="text-2xl font-medium">{{ title }}</h2>
     <input
@@ -33,7 +32,7 @@
     >
       {{ buttonName }}
     </button>
-  </form>
+  </div>
 </template>
 
 <script setup lang="ts">
