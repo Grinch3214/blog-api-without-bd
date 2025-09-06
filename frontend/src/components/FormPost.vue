@@ -14,7 +14,7 @@
     <textarea
       v-model="formData.content"
       name="description"
-      class="basic-input min-h-24"
+      class="basic-input min-h-28"
       placeholder="Post description"
     />
 
