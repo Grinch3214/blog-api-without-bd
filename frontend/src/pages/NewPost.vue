@@ -13,6 +13,8 @@ import axios from 'axios';
 
 const router = useRouter();
 
+const url = 'http://127.0.0.1:5000/posts';
+
 function homePage() {
   router.push('/');
 }
@@ -26,7 +28,6 @@ async function formData(data) {
 }
 
 async function createNewPost(body) {
-  const url = 'http://127.0.0.1:5000/posts';
   try {
     const response = await axios.post(url, body);
     return response;
