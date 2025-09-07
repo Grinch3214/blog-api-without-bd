@@ -1,11 +1,11 @@
 <template>
   <article class="grid gap-3 shadow-2xl rounded-md bg-gray-100 px-4 py-6">
     <h2 class="text-2xl font-medium uppercase">{{ post.title }}</h2>
-    <p class="text-gray-600 text-sm font-medium">{{ formatDate(post.date) }}</p>
+    <p class="text-gray-700 text-sm font-medium">{{ formatDate(post.date) }}</p>
 
     <p class="text-justify">{{ post.content }}</p>
 
-    <p class="text-gray-600 text-sm font-medium">{{ post.author }}</p>
+    <p class="text-gray-700 text-sm font-medium">{{ post.author }}</p>
 
     <div class="flex gap-2">
       <button
