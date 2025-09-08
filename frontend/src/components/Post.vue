@@ -7,7 +7,7 @@
 
     <p class="text-gray-700 text-sm font-medium">{{ post.author }}</p>
 
-    <div class="flex gap-2">
+    <div class="flex gap-3">
       <button
         class="px-8 py-1.5 bg-indigo-950 text-white rounded-md cursor-pointer hover:bg-indigo-950/80 transition-colors"
         @click="editPost(post.id)"
