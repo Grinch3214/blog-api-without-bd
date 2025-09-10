@@ -2,6 +2,16 @@ import express from 'express';
 import cors from 'cors';
 import router from './routes/index.js';
 
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB online'))
+  .catch((err) => console.log('error MongoDB:', err));
+
 const app = express();
 const port = 5000;
 
