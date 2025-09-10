@@ -3,6 +3,7 @@ import Post from '../models/Post.js';
 
 function getPosts(req, res) {
   Post.find()
+    .sort({ date: -1 })
     .then((posts) => {
       res.json(posts);
     })
