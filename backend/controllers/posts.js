@@ -1,91 +1,129 @@
-import posts from '../mockdata.js';
-import Post from '../models/Post.js';
+import { pool } from '../db.js';
 
-function getPosts(req, res) {
-  Post.find()
-    .sort({ date: -1 })
-    .then((posts) => {
-      res.json(posts);
-    })
-    .catch((err) => {
-      res.status(500).json({ message: 'Error load posts', error: err.message });
-    });
-}
-
-function getSinglePost(req, res) {
-  Post.findById(req.params.id)
-    .then((post) => {
-      if (!post) {
-        return res.status(404).json({ message: 'Post not found' });
-      }
-      res.json(post);
-    })
-    .catch((err) => {
-      res
-        .status(500)
-        .json({ message: 'Error search post', error: err.message });
-    });
-}
-
-function updatePost(req, res) {
-  Post.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  })
-    .then((post) => {
-      if (!post) {
-        return res.status(404).json({ message: 'Post not found' });
-      }
-      res.json(post);
-    })
-    .catch((err) => {
-      res.status(400).json({ message: 'Error update', error: err.message });
-    });
-}
-
-function createPost(req, res) {
-  const { title, content, author } = req.body;
-
-  if (!title || !content || !author) {
-    return res.status(400).json({
-      message: 'Missing required fields: date, title, content or author',
-    });
+async function getPosts(req, res) {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM posts ORDER BY created_at DESC'
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error loading posts:', err);
+    res.status(500).json({ message: 'Error load posts', error: err.message });
   }
-
-  const newPost = new Post({
-    title,
-    content,
-    author,
-  });
-
-  newPost
-    .save()
-    .then((savedPost) => {
-      res.status(201).json(savedPost);
-    })
-    .catch((err) => {
-      res
-        .status(400)
-        .json({ message: 'Error create post', error: err.message });
-    });
 }
 
-function deletePost(req, res) {
-  Post.findByIdAndDelete(req.params.id)
-    .then((post) => {
-      if (!post) {
-        return res
-          .status(404)
-          .json({ message: `Post with ID ${req.params.id} not found` });
-      }
-      res.json({
-        message: `Post with ID ${req.params.id} deleted`,
-        deletedPost: post,
+async function getSinglePost(req, res) {
+  try {
+    const { id } = req.params;
+    const result = await pool.query('SELECT * FROM posts WHERE id = $1', [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Error searching post:', err);
+    res.status(500).json({ message: 'Error search post', error: err.message });
+  }
+}
+
+async function createPost(req, res) {
+  try {
+    const { title, content, author } = req.body;
+
+    if (!title || !content || !author) {
+      return res.status(400).json({
+        message: 'Missing required fields: title, content or author',
       });
-    })
-    .catch((err) => {
-      res.status(400).json({ message: 'Wrong ID post', error: err.message });
-    });
+    }
+
+    const result = await pool.query(
+      'INSERT INTO posts (title, content, author) VALUES ($1, $2, $3) RETURNING *',
+      [title, content, author]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error creating post:', err);
+    res.status(400).json({ message: 'Error create post', error: err.message });
+  }
 }
 
+async function updatePost(req, res) {
+  try {
+    const { id } = req.params;
+    const { title, content, author } = req.body;
+
+    const fields = [];
+    const values = [];
+    let paramCount = 1;
+
+    if (title !== undefined) {
+      fields.push(`title = $${paramCount}`);
+      values.push(title);
+      paramCount++;
+    }
+    if (content !== undefined) {
+      fields.push(`content = $${paramCount}`);
+      values.push(content);
+      paramCount++;
+    }
+    if (author !== undefined) {
+      fields.push(`author = $${paramCount}`);
+      values.push(author);
+      paramCount++;
+    }
+
+    if (fields.length === 0) {
+      return res.status(400).json({ message: 'No fields to update' });
+    }
+
+    fields.push(`updated_at = CURRENT_TIMESTAMP`);
+    values.push(id);
+
+    const query = `
+      UPDATE posts 
+      SET ${fields.join(', ')} 
+      WHERE id = $${paramCount} 
+      RETURNING *
+    `;
+
+    const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Error updating post:', err);
+    res.status(400).json({ message: 'Error update', error: err.message });
+  }
+}
+
+async function deletePost(req, res) {
+  try {
+    const { id } = req.params;
+
+    const result = await pool.query(
+      'DELETE FROM posts WHERE id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        message: `Post with ID ${id} not found`,
+      });
+    }
+
+    res.json({
+      message: `Post with ID ${id} deleted`,
+      deletedPost: result.rows[0],
+    });
+  } catch (err) {
+    console.error('Error deleting post:', err);
+    res.status(400).json({ message: 'Wrong ID post', error: err.message });
+  }
+}
 export { getPosts, createPost, deletePost, updatePost, getSinglePost };
